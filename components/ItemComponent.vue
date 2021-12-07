@@ -1,6 +1,19 @@
 <template>
-  <div class="list-item">
-    <slot></slot>
+  <div>
+    <div v-if="type === 'checkbox'" class="list-item">
+      <input
+        :id="title"
+        type="checkbox"
+        v-model="value"
+        @change="$emit('changeValue', title, value)"
+      />
+      <label :for="title">
+        <slot></slot>
+      </label>
+    </div>
+    <div v-if="type === 'base'" class="list-item">
+      <slot></slot>
+    </div>
   </div>
 </template>
 <script>
@@ -10,9 +23,15 @@ export default {
       type: String,
       default: "No title",
     },
+    type: {
+      type: String,
+      default: "base",
+    },
   },
   data: () => {
-    return {};
+    return {
+      value: false,
+    };
   },
 };
 </script>
@@ -31,10 +50,4 @@ export default {
   color: black;
   cursor: pointer;
 }
-.list-item:hover {
-  background-color: rgba(197, 185, 185, 0.489);
-  font-size: 16px;
-  color: white;
-}
-
 </style>
