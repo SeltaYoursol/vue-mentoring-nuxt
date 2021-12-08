@@ -1,69 +1,36 @@
 <template>
   <div class="main-wrapper">
     <h1>Введите запрос</h1>
-    <p>{{ currentCheckboxes.join(", ") }}</p>
-    <div class="input-wrapper">
-      <input
-        class="input"
-        type="text"
-        @input="search()"
-        v-model="currentValue"
-        placeholder="Введите запрос"
-      />
+    <div class="checkbox">
+      <input type="checkbox" id="multiple-checkbox" v-model="multiple" />
+      <label for="multiple-checkbox">Multiple</label>
     </div>
-    <div class="list">
-      <ul v-if="currentList.length > 0">
-        <li v-for="item in currentList" :key="item.id">
-          <item-component
-            type="checkbox"
-            :title="item.title"
-            @changeValue="changeValue"
-          >
-            <span>{{ item.title }}</span>
-          </item-component>
-        </li>
-      </ul>
-      <ul v-else>
-        <li>
-          <item-component type="base">
-            <span>Данные не найдены</span>
-          </item-component>
-        </li>
-      </ul>
-    </div>
+    <Autocomplite :items="films" :multiple="multiple">
+      <template v-slot:search="{data}">
+        <span>{{ data }}</span>
+      </template>
+      <template v-slot:menu="{data}">
+        <div class="list-item" >
+          <input :id="data.title" type="checkbox"/>
+          <label :for="data.title">{{data.title}}</label>
+        </div>
+      </template>
+      <template v-slot:emptyResult>
+        <div class="list-item">No data</div>
+      </template>
+    </Autocomplite>
   </div>
 </template>
 <script>
-import ItemComponent from "../components/ItemComponent";
+import Autocomplite from "../components/Autocomplit.vue";
 import films from "../data.json";
 export default {
-  components: { ItemComponent },
+  components: { Autocomplite },
   data: function () {
     return {
-      currentList: [],
-      currentValue: "",
-      currentCheckboxes: [],
+      multiple: false,
+      films: films,
     };
-  },
-
-  methods: {
-    search() {
-      const query = new RegExp(this.currentValue, "gi");
-      if (this.currentValue.length >= 1) {
-        this.currentList = films.filter((item) => {
-          return query.test(item.title);
-        });
-      }
-    },
-    changeValue(title, value) {
-      if (value && !this.currentCheckboxes.includes(title)) {
-        this.currentCheckboxes.push(title);
-      }
-      if (!value && this.currentCheckboxes.includes(title)) {
-        let index = this.currentCheckboxes.indexOf(title);
-        this.currentCheckboxes.splice(index, 1);
-      }
-    },
   },
 };
 </script>
@@ -71,6 +38,7 @@ export default {
 *,
 body {
   box-sizing: border-box;
+  font-family: Arial, sans-serif;
 }
 .main-wrapper {
   display: flex;
@@ -80,34 +48,9 @@ body {
   align-items: center;
   flex-direction: column;
 }
-.input {
-  width: 60%;
-  height: 40px;
-  padding: 10px 15px;
-}
-
-.input-wrapper {
-  width: 100%;
+.checkbox {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-}
-
-.list {
-  width: 60%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-}
-
-.list ul li {
-  list-style: none;
-  margin: 0 auto;
-}
-
-ul {
-  padding: 0;
-  width: 100%;
 }
 </style>
