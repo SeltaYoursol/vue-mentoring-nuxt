@@ -1,7 +1,7 @@
 <template>
   <div class="autocomplete">
-   seach {{searchQuery}}
-   <div> listSh {{selectedItems}}</div>
+    seach {{searchQuery}}
+    <div> listSh {{selectedItems}}</div>
     <div class="search">
       <div v-if="selectedItems.length && multiple" class="items-wrapper">
         <div
@@ -48,9 +48,11 @@ export default {
     multiple: {
       type: Boolean,
       default: false
-    },
-    value: {
-      type: Array
+    }
+  },
+  items: {
+    validator: function (value) {
+      return value.length > 0
     }
   },
   data: () => {
@@ -74,6 +76,9 @@ export default {
         this.selectedItems = []
         this.searchResults = []
         this.$emit('input', this.selectedItems)
+      }
+      if (!newVal && this.selectedItems.length && this.multiple) {
+        this.searchResults = []
       }
     }
   },
