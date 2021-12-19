@@ -1,7 +1,5 @@
 <template>
   <div class="autocomplete">
-    seach {{searchQuery}}
-    <div> listSh {{selectedItems}}</div>
     <div class="search">
       <div v-if="selectedItems.length && multiple" class="items-wrapper">
         <div
@@ -40,44 +38,26 @@
   </div>
 </template>
 <script>
+import search from '../mixins/select'
 export default {
-  props: {
-    items: {
-      type: Array
-    },
-    multiple: {
-      type: Boolean,
-      default: false
-    }
-  },
-  items: {
-    validator: function (value) {
-      return value.length > 0
-    }
-  },
+  mixins: [search],
   data: () => {
     return {
       searchResults: [],
-      selectedItems: [],
-      searchQuery: '',
       noData: false
     }
   },
   watch: {
-    multiple: function (newVal) {
-      if (!newVal) {
-        this.selectedItems = []
-        this.searchQuery = ''
-        this.$emit('input', this.selectedItems)
-      }
-    },
     searchQuery: function (newVal) {
       if (!newVal && this.selectedItems.length && !this.multiple) {
-        this.selectedItems = []
         this.searchResults = []
-        this.$emit('input', this.selectedItems)
       }
       if (!newVal && this.selectedItems.length && this.multiple) {
+        this.searchResults = []
+      }
+    },
+    selectedItems: function (newVal) {
+      if (newVal) {
         this.searchResults = []
       }
     }
@@ -93,32 +73,10 @@ export default {
       } else {
         this.noData = true
       }
-    },
-    selectItem (event, value) {
-      if (this.multiple) {
-        this.searchQuery = ''
-      } else {
-        this.searchQuery = value
-        this.searchResults = []
-      }
-      if (!this.selectedItems.includes(value)) {
-        this.addItem(value)
-      } else {
-        this.deleteItem(value)
-      }
-    },
-    addItem (item) {
-      this.selectedItems.push(item)
-    },
-    deleteItem (item) {
-      const index = this.selectedItems.indexOf(item)
-      this.selectedItems.splice(index, 1)
-      if (this.multiplet) {
-        this.searchQuery = ''
-      }
     }
   }
 }
+
 </script>
 <style scoped>
   .autocomplete {

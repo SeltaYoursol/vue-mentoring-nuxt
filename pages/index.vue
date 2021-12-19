@@ -5,7 +5,6 @@
       <input type="checkbox" id="multiple-checkbox" v-model="multiple" />
       <label for="multiple-checkbox">Multiple</label>
     </div>
-   list: {{list}}
     <Autocomplite :items="films" :multiple="multiple" v-model="list">
       <template v-slot:search="{data}">
         <span>{{ data }}</span>
