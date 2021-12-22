@@ -5,7 +5,8 @@
       <input type="checkbox" id="multiple-checkbox" v-model="multiple" />
       <label for="multiple-checkbox">Multiple</label>
     </div>
-    <Autocomplite :items="films" :multiple="multiple" v-model="list">
+    <h2>Autocomplete</h2>
+    <Autocomplete :items="films" :multiple="multiple" v-model="list">
       <template v-slot:search="{data}">
         <span>{{ data }}</span>
       </template>
@@ -17,14 +18,21 @@
       <template v-slot:emptyResult>
         <div class="list-item">No data</div>
       </template>
-    </Autocomplite>
+    </Autocomplete>
+    <h2>Combobox</h2>
+    <Combobox :items="films" :multiple="multiple">
+      <template v-slot:search="{data}">
+        <span>{{ data }}</span>
+      </template>
+    </Combobox>
   </div>
 </template>
 <script>
-import Autocomplite from '../components/Autocomplete.vue'
+import Autocomplete from '../components/Autocomplete.vue'
 import films from '../data.json'
+import Combobox from '../components/Combobox'
 export default {
-  components: { Autocomplite },
+  components: { Combobox, Autocomplete },
   data: function () {
     return {
       multiple: false,

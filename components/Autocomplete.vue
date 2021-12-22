@@ -40,41 +40,7 @@
 <script>
 import search from '../mixins/select'
 export default {
-  mixins: [search],
-  data: () => {
-    return {
-      searchResults: [],
-      noData: false
-    }
-  },
-  watch: {
-    searchQuery: function (newVal) {
-      if (!newVal && this.selectedItems.length && !this.multiple) {
-        this.searchResults = []
-      }
-      if (!newVal && this.selectedItems.length && this.multiple) {
-        this.searchResults = []
-      }
-    },
-    selectedItems: function (newVal) {
-      if (newVal) {
-        this.searchResults = []
-      }
-    }
-  },
-  methods: {
-    search () {
-      this.$emit('input', this.selectedItems)
-      const query = new RegExp(this.searchQuery, 'gi')
-      if (this.searchQuery.length >= 1) {
-        this.searchResults = this.items.filter((item) => {
-          return query.test(item.title)
-        })
-      } else {
-        this.noData = true
-      }
-    }
-  }
+  mixins: [search]
 }
 
 </script>
@@ -87,7 +53,6 @@ export default {
     align-items: center;
     padding: 10px;
   }
-
   .input {
     min-width: 60px;
     flex: 1 1;
@@ -95,18 +60,6 @@ export default {
     height: 100%;
     outline: none;
   }
-
-  .input-wrapper {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .items-wraper {
-    display: inline-flex;
-  }
-
   .list {
     width: 60%;
     display: flex;
