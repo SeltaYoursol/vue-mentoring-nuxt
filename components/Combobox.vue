@@ -39,6 +39,12 @@
 import search from '../mixins/select'
 
 export default {
+  props: {
+    currentSearchQuery: {
+      type: String,
+      default: ''
+    }
+  },
   mixins: [search],
   data: () => {
     return {
@@ -64,6 +70,7 @@ export default {
       }
     },
     inputHandler () {
+      this.$emit('update:currentSearchQuery', this.searchQuery)
       this.toggleMenu()
       this.search()
     }

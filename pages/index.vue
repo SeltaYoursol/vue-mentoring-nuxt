@@ -1,6 +1,7 @@
 <template>
   <div class="main-wrapper">
     <h1>Введите запрос</h1>
+    <h2> sync query {{currentSearchQuery}}</h2>
     <div class="checkbox">
       <input type="checkbox" id="multiple-checkbox" v-model="multiple" />
       <label for="multiple-checkbox">Multiple</label>
@@ -20,7 +21,7 @@
       </template>
     </Autocomplete>
     <h2>Combobox</h2>
-    <Combobox :items="films" :multiple="multiple">
+    <Combobox :items="films" :multiple="multiple" :currentSearchQuery.sync="currentSearchQuery" >
       <template v-slot:search="{data}">
         <span>{{ data }}</span>
       </template>
@@ -37,7 +38,8 @@ export default {
     return {
       multiple: false,
       films: films,
-      list: []
+      list: [],
+      currentSearchQuery: ''
     }
   }
 }
