@@ -1,31 +1,14 @@
 <template>
   <div class="main-wrapper">
-    <h1>Введите запрос</h1>
-    <div class="checkbox">
-      <input type="checkbox" id="multiple-checkbox" v-model="multiple" />
-      <label for="multiple-checkbox">Multiple</label>
-    </div>
-   list: {{list}}
-    <Autocomplite :items="films" :multiple="multiple" v-model="list">
-      <template v-slot:search="{data}">
-        <span>{{ data }}</span>
-      </template>
-      <template v-slot:menu="{data}">
-        <div class="list-item" >
-          <p >{{data.title}}</p>
-        </div>
-      </template>
-      <template v-slot:emptyResult>
-        <div class="list-item">No data</div>
-      </template>
-    </Autocomplite>
+    <DynamicTabs :navigationList="navigation"/>
   </div>
 </template>
 <script>
-import Autocomplite from '../components/Autocomplete.vue'
+import DynamicTabs from '../components/DynamicTabs'
 import films from '../data.json'
+
 export default {
-  components: { Autocomplite },
+  components: { DynamicTabs },
   data: function () {
     return {
       multiple: false,
@@ -36,22 +19,24 @@ export default {
 }
 </script>
 <style scoped>
-*,
-body {
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-}
-.main-wrapper {
-  display: flex;
-  width: 100%;
-  height: 100vh;
-  justify-content: flex-start;
-  align-items: center;
-  flex-direction: column;
-}
-.checkbox {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-}
+  *,
+  body {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+  }
+
+  .main-wrapper {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .checkbox {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
 </style>
