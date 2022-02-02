@@ -2,41 +2,47 @@
 <template>
 	<div class="tabs">
 		<div class="tabs-navigation">
-			<button v-for="(item,index) in navigationList" :key="index" class="tabs-navigation__item"
-			        :class="currentTab === item.id ? 'tabs-navigation__item_active':''"
-			        @click="onTabClickHandler(item.id, item.title)">
-				{{item.title}}
+			<button v-for="tab in navigation" :key="tab.id" class="tabs-navigation__item"
+			        :class="currentTab === tab.id ? 'tabs-navigation__item_active':''"
+			        @click="onTabClickHandler(tab.id, tab.title)">
+				{{tab.title}}
 			</button>
 		</div>
 		<div class="tabs-content">
-			<template  v-for="item in navigationList" :key="item.id">
-				<slot v-if="item.title === component" :name="item.title">
+			<template v-for="tab in tabs">
+				<slot v-if="tab.id === currentTab" :name="tab.title">
 				</slot>
 			</template>
 		</div>
 	</div>
 </template>
 <script>
-
-
     export default {
         name: 'DynamicTabs',
+        props: {
+            navigation: {
+                type: Array,
+                default: []
+            },
+        },
 
         data: () => {
             return {
                 currentTab: 1,
-                navigationList: [
-                    {title: 'Social', id: 1},
-                    {title: 'Login', id: 2},
-                    {title: 'Registration', id: 3}
-                ],
-                component: "Social",
+            }
+        },
+        computed: {
+            tabs() {
+                let result = this.navigation
+                for (let i = 0; i < this.navigation.length; i++) {
+                    result[i].id = i + 1
+                }
+                return result
             }
         },
         methods: {
             onTabClickHandler(id, title) {
                 this.currentTab = id
-                this.component = title
             }
         }
     }

@@ -1,9 +1,19 @@
 <template>
 	<div class="main-wrapper">
-		<DynamicTabs :navigationList="navigation">
+		<DynamicTabs :navigation="navigation">
 			<template v-slot:Social>
 				<keep-alive>
 					<Social/>
+				</keep-alive>
+			</template>
+			<template v-slot:Registration>
+				<keep-alive>
+					<Registration/>
+				</keep-alive>
+			</template>
+			<template v-slot:Login>
+				<keep-alive>
+					<Login/>
 				</keep-alive>
 			</template>
 		</DynamicTabs>
@@ -27,7 +37,11 @@
             return {
                 multiple: false,
                 films: films,
-                list: []
+                navigation: [
+                    {title: 'Social'},
+                    {title: 'Login',},
+                    {title: 'Registration'}
+                ],
             }
         }
     }
