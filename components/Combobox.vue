@@ -15,15 +15,15 @@
 					type="text"
 					class="input"
 					v-model="searchQuery"
-					@input="inputHandler"
 					@click="toggleMenu"
 					@keydown="deleteHandler($event)"
+					readonly="readonly"
 			/>
 		</div>
 		<div v-if="showMenu" class="menu">
 			<div class="list">
 				<div
-						v-for="(item, index) in list"
+						v-for="(item, index) in items"
 						class="menu-item"
 						:key="index"
 						@click="selectComboboxItem($event,item.title)"
@@ -37,19 +37,11 @@
 
 <script>
     import selectable from '../mixins/selectable'
-    import searchable from '../mixins/searchable'
-    import watchers from "../mixins/watchers";
+
 
     export default {
-        mixins: [selectable, searchable, watchers],
+        mixins: [selectable],
         props: {
-            items: {
-                type: Array
-            },
-            multiple: {
-                type: Boolean,
-                default: false
-            },
             currentSearchQuery: {
                 type: String,
                 default: ''
@@ -58,11 +50,6 @@
         data: () => {
             return {
                 showMenu: false
-            }
-        },
-        computed: {
-            list() {
-                return this.searchResults.length ? this.searchResults : this.items
             }
         },
         methods: {
@@ -77,12 +64,11 @@
                 if (event.code === 'Backspace' && this.multiple && this.selectedItems.length) {
                     this.deleteItem(this.selectedItems[-1])
                 }
+                else if(event.code === 'Backspace' && !this.multiple) {
+                    this.searchQuery = ''
+	            }
+
             },
-            inputHandler() {
-                this.$emit('update:currentSearchQuery', this.searchQuery)
-                this.toggleMenu()
-                this.search()
-            }
         }
     }
 </script>

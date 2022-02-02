@@ -1,5 +1,13 @@
 const selectable = {
-
+    props: {
+        items: {
+            type: Array
+        },
+        multiple: {
+            type: Boolean,
+            default: false
+        },
+    },
     items: {
         validator: function (value) {
             return value.length > 0
@@ -8,10 +16,20 @@ const selectable = {
     data: () => {
         return {
             selectedItems: [],
+            searchQuery: ''
         }
     },
+    watch: {
+        multiple: function (newVal) {
+            this.selectedItems = []
+            this.$emit('input', this.selectedItems)
+        },
+    },
     methods: {
+        onSelect() {
+        },
         selectItem(event, value) {
+            this.onSelect()
             if (this.multiple) {
                 this.searchQuery = ''
             } else {

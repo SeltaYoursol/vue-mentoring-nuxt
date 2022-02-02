@@ -15,7 +15,7 @@
 					type="text"
 					class="input"
 					v-model="searchQuery"
-					@input="search"
+					@input="$emit('input', selectedItems)"
 			/>
 		</div>
 		<div class="menu">
@@ -39,20 +39,44 @@
 </template>
 <script>
     import selectable from '../mixins/selectable'
-    import searchable from '../mixins/searchable'
-    import watchers from "../mixins/watchers";
 
     export default {
-        mixins: [selectable, searchable, watchers],
-        props: {
-            items: {
-                type: Array
-            },
-            multiple: {
-                type: Boolean,
-                default: false
+        mixins: [selectable],
+        data: () => {
+            return {
+                noData: false,
             }
         },
+        watch: {
+            searchQuery: function (newVal) {
+                if (!newVal && this.selectedItems.length && !this.multiple) {
+                    this.selectedItems = []
+                    this.$emit('input', this.selectedItems)
+                }
+                if (!newVal && this.selectedItems.length && this.multiple) {
+                    this.searchResults = []
+                }
+            },
+            searchResults: function (newVal) {
+                this.noData = !!(newVal.length === 0 && this.searchQuery);
+            }
+        },
+        computed: {
+            searchResults() {
+                const query = new RegExp(this.searchQuery, 'gi')
+                if (this.searchQuery.length >= 1) {
+                    return this.items.filter((item) => {
+                        return query.test(item.title)
+                    })
+                }
+                return []
+            },
+        },
+        methods: {
+            onSelect() {
+                this.searchResults = []
+            }
+        }
     }
 </script>
 <style scoped>
@@ -87,7 +111,7 @@
 		justify-content: flex-start;
 		align-items: center;
 		border: 1px solid grey;
-		height: 40px;
+		min-height: 40px;
 		overflow: hidden;
 		margin-bottom: 10px;
 		padding: 10px;
