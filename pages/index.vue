@@ -1,57 +1,56 @@
 <template>
-  <div class="main-wrapper">
-    <h1>Введите запрос</h1>
-    <div class="checkbox">
-      <input type="checkbox" id="multiple-checkbox" v-model="multiple" />
-      <label for="multiple-checkbox">Multiple</label>
-    </div>
-   list: {{list}}
-    <Autocomplite :items="films" :multiple="multiple" v-model="list">
-      <template v-slot:search="{data}">
-        <span>{{ data }}</span>
-      </template>
-      <template v-slot:menu="{data}">
-        <div class="list-item" >
-          <p >{{data.title}}</p>
-        </div>
-      </template>
-      <template v-slot:emptyResult>
-        <div class="list-item">No data</div>
-      </template>
-    </Autocomplite>
-  </div>
+	<div class="main-wrapper">
+		<h1 v-spoiler>Введите запрос</h1>
+	</div>
 </template>
 <script>
-import Autocomplite from '../components/Autocomplete.vue'
-import films from '../data.json'
-export default {
-  components: { Autocomplite },
-  data: function () {
-    return {
-      multiple: false,
-      films: films,
-      list: []
+    import films from '../data.json'
+
+    export default {
+        data: function () {
+            return {
+                multiple: false,
+                films: films,
+                list: []
+            }
+        },
+        directives: {
+            spoiler: {
+                inserted: function (el) {
+                    el.style.background = 'black'
+                    el.style.color = 'black'
+                    el.addEventListener('mouseover', () => {
+                        el.style.background = 'inherit'
+                        el.style.color = 'inherit'
+                    })
+                    el.addEventListener('mouseout', () => {
+                        el.style.background = 'black'
+                        el.style.color = 'black'
+                    })
+                }
+            }
+        }
     }
-  }
-}
 </script>
 <style scoped>
-*,
-body {
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-}
-.main-wrapper {
-  display: flex;
-  width: 100%;
-  height: 100vh;
-  justify-content: flex-start;
-  align-items: center;
-  flex-direction: column;
-}
-.checkbox {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-}
+	*,
+	body {
+		box-sizing: border-box;
+		font-family: Arial, sans-serif;
+	}
+
+	.main-wrapper {
+		display: flex;
+		width: 100%;
+		height: 100vh;
+		justify-content: flex-start;
+		align-items: center;
+		flex-direction: column;
+	}
+
+	.checkbox {
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+	}
 </style>
