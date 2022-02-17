@@ -1,6 +1,6 @@
 <template>
 	<div class="main-wrapper">
-		<h1 v-spoiler>Введите запрос</h1>
+		<h1 v-spoiler="{ startBlurEvent: 'click', endBlurEvent: 'mouseout' }">Введите запрос</h1>
 	</div>
 </template>
 <script>
@@ -16,14 +16,14 @@
         },
         directives: {
             spoiler: {
-                inserted: function (el) {
+                inserted: function (el, binding) {
                     el.style.background = 'black'
                     el.style.color = 'black'
-                    el.addEventListener('mouseover', () => {
+                    el.addEventListener(binding.value.startBlurEvent, () => {
                         el.style.background = 'inherit'
                         el.style.color = 'inherit'
                     })
-                    el.addEventListener('mouseout', () => {
+                    el.addEventListener(binding.value.endBlurEvent, () => {
                         el.style.background = 'black'
                         el.style.color = 'black'
                     })
