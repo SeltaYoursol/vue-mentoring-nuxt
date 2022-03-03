@@ -1,48 +1,31 @@
 <template>
 	<div class="main-wrapper">
-		<h1>Введите запрос</h1>
-		<h2> sync query {{currentSearchQuery}}</h2>
-		<div class="checkbox">
-			<input type="checkbox" id="multiple-checkbox" v-model="multiple"/>
-			<label for="multiple-checkbox">Multiple</label>
-		</div>
-		<h2>Autocomplete</h2>
-		<Autocomplete :items="films" :multiple="multiple" v-model="list">
-			<template v-slot:search="{data}">
-				<span>{{ data }}</span>
-			</template>
-			<template v-slot:menu="{data}">
-				<div class="list-item">
-					<p>{{data.title}}</p>
-				</div>
-			</template>
-			<template v-slot:emptyResult>
-				<div class="list-item">No data</div>
-			</template>
-		</Autocomplete>
-		<h2>Combobox</h2>
-		<Combobox :items="films" :multiple="multiple" :currentSearchQuery.sync="currentSearchQuery">
-			<template v-slot:search="{data}">
-				<span>{{ data }}</span>
-			</template>
-		</Combobox>
+		Здесь будет показан список фильмов с сервера
+		<ul>
+			<li v-for="item in  films">
+				{{item.title}}
+
+			</li>
+		</ul>
 	</div>
 </template>
 <script>
-    import Autocomplete from '../components/Autocomplete.vue'
-    import films from '../data.json'
-    import Combobox from '../components/Combobox'
-
     export default {
-        components: {Combobox, Autocomplete},
-        data: function () {
-            return {
-                multiple: false,
-                films: films,
-                list: [],
-                currentSearchQuery: ''
+        async fetch({store}) {
+            if (store.getters['films/films'].length === 0) {
+                await store.dispatch('films/getList')
             }
-        }
+        },
+
+        data: function () {
+            return {}
+        },
+
+        computed: {
+            films() {
+                return this.$store.getters['films/films'];
+            }
+        },
     }
 </script>
 <style scoped>
@@ -59,11 +42,5 @@
 		justify-content: flex-start;
 		align-items: center;
 		flex-direction: column;
-	}
-
-	.checkbox {
-		display: flex;
-		justify-content: flex-start;
-		align-items: center;
 	}
 </style>
